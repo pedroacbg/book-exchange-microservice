@@ -1,7 +1,9 @@
 package com.pedroacbg.controller;
 
+import com.pedroacbg.dto.ExchangeDTO;
 import com.pedroacbg.environment.InstanceInformationService;
 import com.pedroacbg.model.Book;
+import com.pedroacbg.proxy.ExchangeProxy;
 import com.pedroacbg.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -9,9 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import javax.xml.crypto.Data;
 import java.util.Date;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("book-service")
@@ -23,6 +27,9 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private ExchangeProxy exchangeProxy;
+
 //    @GetMapping(value = "/{id}/{currency}", produces = MediaType.APPLICATION_JSON_VALUE)
 //    public Book getBook(@PathVariable(name = "id") Long id, @PathVariable(name = "currency") String currency){
 //        String port = instanceInformationService.retrieveServerPort();
@@ -33,7 +40,20 @@ public class BookController {
     public Book getBook(@PathVariable(name = "id") Long id, @PathVariable(name = "currency") String currency){
         String port = instanceInformationService.retrieveServerPort();
         var book = bookRepository.findById(id).orElseThrow();
-        book.setEnvironment("PORT " + port);
+        ExchangeDTO exchange = exchangeProxy.getExchange(book.getPrice(), "USD", currency);
+
+        /*HashMap<String, String> params = new HashMap<>();
+        params.put("amount", book.getPrice().toString());
+        params.put("from", "USD");
+        params.put("to", currency);
+
+        var response = new RestTemplate()
+                .getForEntity("http://localhost:8000/exchange-service" + "/{amount}/{from}/{to}", ExchangeDTO.class, params);
+
+        ExchangeDTO exchange = response.getBody();*/
+
+        book.setEnvironment("PORT " + port + " FEIGN");
+        book.setPrice(exchange.getConvertedValue());
         book.setCurrency(currency);
         return book;
     }
