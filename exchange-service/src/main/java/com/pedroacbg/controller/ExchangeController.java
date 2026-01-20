@@ -2,6 +2,7 @@ package com.pedroacbg.controller;
 
 import com.pedroacbg.environment.InstanceInformationService;
 import com.pedroacbg.model.Exchange;
+import com.pedroacbg.repository.ExchangeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +19,25 @@ public class ExchangeController {
     @Autowired
     private InstanceInformationService instanceInformationService;
 
-    @GetMapping(value = "/{amount}/{from}/{to}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Autowired
+    private ExchangeRepository exchangeRepository;
+
+   /* @GetMapping(value = "/{amount}/{from}/{to}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Exchange getExchange(@PathVariable("amount") BigDecimal amount, @PathVariable("from") String from, @PathVariable("to") String to){
         return new Exchange(1L, from, to, BigDecimal.ONE, BigDecimal.ONE, "PORT " + instanceInformationService.retrieveServerPort());
+    }*/
+
+    @GetMapping(value = "/{amount}/{from}/{to}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Exchange getExchange(@PathVariable("amount") BigDecimal amount, @PathVariable("from") String from, @PathVariable("to") String to){
+        Exchange exchange = exchangeRepository.findByFromAndTo(from, to);
+        if(exchange == null) throw new RuntimeException("Currency Unsupported!");
+
+        BigDecimal conversionFactor = exchange.getConversionFactor();
+        BigDecimal convertedValue = conversionFactor.multiply(amount);
+        exchange.setConvertedValue(convertedValue);
+        exchange.setEnvironment("PORT " + instanceInformationService.retrieveServerPort());
+
+        return exchange;
     }
 
 }
