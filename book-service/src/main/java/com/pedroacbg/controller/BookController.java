@@ -48,7 +48,8 @@ public class BookController {
 
         ExchangeDTO exchange = response.getBody();*/
 
-        book.setEnvironment("PORT " + port + " FEIGN");
+        //book.setEnvironment("PORT " + port + " FEIGN");
+        book.setEnvironment("BOOK PORT: " + port + "; EXCHANGE PORT: " + exchange.getEnvironment());
         book.setPrice(exchange.getConvertedValue());
         book.setCurrency(currency);
         return book;
