@@ -3,6 +3,8 @@ package com.pedroacbg.controller;
 import com.pedroacbg.environment.InstanceInformationService;
 import com.pedroacbg.model.Exchange;
 import com.pedroacbg.repository.ExchangeRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 
+@Tag(name = "Exchange Endpoint")
 @RestController
 @RequestMapping("exchange-service")
 public class ExchangeController {
@@ -27,6 +30,7 @@ public class ExchangeController {
         return new Exchange(1L, from, to, BigDecimal.ONE, BigDecimal.ONE, "PORT " + instanceInformationService.retrieveServerPort());
     }*/
 
+    @Operation(summary = "Get an exchange from amount of currency")
     @GetMapping(value = "/{amount}/{from}/{to}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Exchange getExchange(@PathVariable("amount") BigDecimal amount, @PathVariable("from") String from, @PathVariable("to") String to){
         Exchange exchange = exchangeRepository.findByFromAndTo(from, to);
