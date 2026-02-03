@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: api-gateway
+  management:
+    tracing:
+      sampling:
+        probability: 0.5
   cloud:
     gateway:
       server:
