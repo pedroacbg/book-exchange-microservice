@@ -2,13 +2,12 @@
 
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen)
-![Docker](https://img.shields.io/badge/Docker-Containerized-blue)
 ![Architecture](https://img.shields.io/badge/Architecture-Microservices-purple)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 Sistema backend baseado em **arquitetura de microsserviços** para gerenciamento de **troca e aluguel de livros entre usuários**.
 
-O projeto foi desenvolvido com o objetivo de demonstrar a construção de um sistema distribuído utilizando **Java e Spring Boot**, aplicando conceitos modernos de **microservices architecture**, **REST APIs** e **containerização com Docker**.
+O projeto foi desenvolvido com o objetivo de demonstrar a construção de um sistema distribuído utilizando **Java e Spring Boot**, aplicando conceitos modernos de **microservices architecture** e **REST APIs**.
 
 ---
 
@@ -28,8 +27,6 @@ O projeto foi desenvolvido com o objetivo de demonstrar a construção de um sis
 
 ### Infraestrutura
 
-* Docker
-* Docker Compose
 * Maven
 
 ### Ferramentas
@@ -109,7 +106,6 @@ api-gateway
 user-service
 book-service
 exchange-service
-docker-compose.yml
 ```
 
 Cada serviço contém:
@@ -134,11 +130,9 @@ git clone https://github.com/pedroacbg/book-exchange-microservice
 
 cd book-exchange-microservice
 
-## 3️⃣ Executar com Docker
+## 3️⃣ Executar com Maven
 
-docker-compose up -d
-
-Isso iniciará todos os microsserviços e bancos de dados necessários.
+mvn spring-boot:run
 
 ---
 
@@ -171,7 +165,6 @@ Este projeto foi desenvolvido com foco em estudo e prática dos seguintes concei
 * Arquitetura de microsserviços
 * Desenvolvimento de APIs REST com Spring Boot
 * Comunicação entre serviços
-* Containerização com Docker
 * Boas práticas de backend
 
 ---
